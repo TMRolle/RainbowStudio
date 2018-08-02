@@ -110,7 +110,7 @@ public class Pong extends MidiBase {
     int bar = 0;
     if (pitch == topRight) {
       paddle2Pos++;
-      if (paddle2Pos > 30 - paddleHeight)  {
+      if (paddle2Pos > 30 - paddleHeight) {
         paddle2Pos--;
       }
     } else if (pitch == bottomRight) {
@@ -121,7 +121,7 @@ public class Pong extends MidiBase {
 
     if (pitch == topLeft) {
       paddle1Pos++;
-      if (paddle1Pos > 30 - paddleHeight)  {
+      if (paddle1Pos > 30 - paddleHeight) {
         paddle1Pos--;
       }
     } else if (pitch == bottomLeft) {

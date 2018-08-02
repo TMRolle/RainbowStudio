@@ -55,7 +55,8 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
       }
       pg.image(frameImg, currentPos, 0);
       currentPos -= xSpeed.getValue();
-    } catch (ArrayIndexOutOfBoundsException ex) {
+    }
+    catch (ArrayIndexOutOfBoundsException ex) {
       // handle race condition when reloading images.
     }
   }

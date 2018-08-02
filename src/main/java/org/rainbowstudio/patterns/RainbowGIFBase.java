@@ -84,7 +84,8 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
     }
     try {
       renderToPoints();
-    } catch (ArrayIndexOutOfBoundsException ex) {
+    }
+    catch (ArrayIndexOutOfBoundsException ex) {
       // Sometimes caused by race condition when reloading, just skip a frame.
     }
   }

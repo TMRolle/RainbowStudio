@@ -46,7 +46,7 @@ public class AnimatedTextPP extends PGPixelPerfect implements CustomDeviceUI {
   int renderedTextWidth = 0;
   int textGapPixels = 10;
   PFont font;
-  int fontSize = 20;
+  int fontSize = 30;
 
   public AnimatedTextPP(LX lx) {
     super(lx, "");
@@ -56,7 +56,7 @@ public class AnimatedTextPP extends PGPixelPerfect implements CustomDeviceUI {
     for (String fontName : fontNames) {
       System.out.println("Font: " + fontName);
     }
-    font = RainbowStudio.pApplet.createFont("ComicSansMS", fontSize, true);
+    font = RainbowStudio.pApplet.createFont("04b", fontSize, true);
     for (int i = 0; i < defaultTexts.length; i++) {
       textItems.add(new TextItem(defaultTexts[i]));
     }
@@ -69,7 +69,7 @@ public class AnimatedTextPP extends PGPixelPerfect implements CustomDeviceUI {
     textImage = RainbowStudio.pApplet.createGraphics(bufferWidth, 30);
     currentPos = imageWidth + 1;
     lastPos = imageWidth + 2;
-    textImage.smooth();
+    textImage.noSmooth();
     textImage.beginDraw();
     textImage.background(0);
     textImage.stroke(255);
@@ -85,7 +85,7 @@ public class AnimatedTextPP extends PGPixelPerfect implements CustomDeviceUI {
       textImage.endDraw();
       redrawTextBuffer(renderedTextWidth + 10);
     } else {
-      textImage.text(currentText, 0, fontSize + 2);
+      textImage.text(currentText, 0, fontSize - 3);
       textImage.endDraw();
     }
   }
