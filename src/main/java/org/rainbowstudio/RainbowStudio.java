@@ -148,9 +148,6 @@ public class RainbowStudio extends PApplet {
     boolean multithreaded = false;
     lx = new heronarts.lx.studio.LXStudio(this, model, multithreaded);
 
-    // Register any patterns and effects LX doesn't recognize
-    registerAll(lx);
-
     lx.ui.setResizable(RESIZABLE);
 
     modeSelector = (UIModeSelector) new UIModeSelector(lx.ui, lx).setExpanded(true).addToContainer(lx.ui.leftPane.global);
@@ -345,13 +342,16 @@ public class RainbowStudio extends PApplet {
   }
 
 
-  void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
+  public void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
     // Add custom components or output drivers here
     // Register settings
     lx.engine.registerComponent("rainbowSettings", new Settings(lx, ui));
+
+    // Register any patterns and effects LX doesn't recognize
+    registerAll(lx);
   }
 
-  void onUIReady(heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
+  public void onUIReady(heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
     // Add custom UI components here
   }
 
