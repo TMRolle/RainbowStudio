@@ -46,7 +46,9 @@ public class UIGammaSelector extends UICollapsibleSection {
         Gamma.buildBlueGammaLUT(parameter.getValuef());
       }
     };
+    //blueGamma.setOscAddress("/blueGamma");
     blueSlider.setParameter(blueGamma);
+    //System.out.println("blueGamma path: " + LXOscEngine.getOscAddress(blueGamma));
     blueSlider.addToContainer(this);
   }
 }

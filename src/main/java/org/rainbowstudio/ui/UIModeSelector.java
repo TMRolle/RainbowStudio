@@ -180,6 +180,9 @@ public class UIModeSelector extends UICollapsibleSection {
 
   public LXChannel getChannelByLabel(LX lx, String label) {
     for (LXChannelBus channelBus : lx.engine.channels) {
+      if (!(channelBus instanceof LXChannel)) {
+        continue;
+      }
       LXChannel channel = (LXChannel) channelBus;
       if (label.equalsIgnoreCase(channel.getLabel()))
         return channel;
