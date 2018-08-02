@@ -23,15 +23,22 @@
 
 package org.rainbowstudio;
 
+import com.google.common.reflect.ClassPath;
 import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.rainbowstudio.model.RainbowBaseModel;
 import org.rainbowstudio.model.RainbowModel3D;
@@ -87,6 +94,47 @@ public class RainbowStudio extends PApplet {
     size(800, 720, P3D);
   }
 
+  /**
+   * Registers all patterns and effects that LX doesn't already have registered.
+   * This check is important because LX just adds to a list.
+   *
+   * @param lx the LX environment
+   */
+  private void registerAll(LXStudio lx) {
+    List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
+    List<Class<? extends LXEffect>> effects = lx.getRegisteredEffects();
+    final String parentPackage = getClass().getPackage().getName();
+
+    try {
+      ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+      for (ClassPath.ClassInfo classInfo : classPath.getAllClasses()) {
+        // Limit to this package and sub-packages
+        if (!classInfo.getPackageName().startsWith(parentPackage)) {
+          continue;
+        }
+        Class<?> c = classInfo.load();
+        if (Modifier.isAbstract(c.getModifiers())) {
+          continue;
+        }
+        if (LXPattern.class.isAssignableFrom(c)) {
+          Class<? extends LXPattern> p = c.asSubclass(LXPattern.class);
+          if (!patterns.contains(p)) {
+            lx.registerPattern(p);
+            logger.info("Added pattern: " + p);
+          }
+        } else if (LXEffect.class.isAssignableFrom(c)) {
+          Class<? extends LXEffect> e = c.asSubclass(LXEffect.class);
+          if (!effects.contains(e)) {
+            lx.registerEffect(e);
+            logger.info("Added effect: " + e);
+          }
+        }
+      }
+    } catch (IOException ex) {
+      logger.log(Level.WARNING, "Error finding pattern and effect classes", ex);
+    }
+  }
+
   @Override
   public void setup() {
     // Processing setup, constructs the window and the LX instance
@@ -99,6 +147,9 @@ public class RainbowStudio extends PApplet {
     /* MULTITHREADED disabled for P3D, GL, Hardware Acceleration */
     boolean multithreaded = false;
     lx = new heronarts.lx.studio.LXStudio(this, model, multithreaded);
+
+    // Register any patterns and effects LX doesn't recognize
+    registerAll(lx);
 
     lx.ui.setResizable(RESIZABLE);
 
