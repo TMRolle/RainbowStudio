@@ -1,4 +1,4 @@
-package org.rainbowstudio;
+package org.rainbowstudio.patterns;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
