@@ -101,6 +101,15 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
     gifFiles = PathUtils.findDataFiles(filesDir, ".gif");
     fileItems.clear();
     for (String filename : gifFiles) {
+      // Use a name that's suitable for the knob
+      int index = filename.lastIndexOf('/');
+      if (index >= 0) {
+        filename = filename.substring(index + 1);
+      }
+      index = filename.lastIndexOf('.');
+      if (index >= 0) {
+        filename = filename.substring(0, index);
+      }
       fileItems.add(new FileItem(filename));
     }
     if (fileItemList != null) fileItemList.setItems(fileItems);

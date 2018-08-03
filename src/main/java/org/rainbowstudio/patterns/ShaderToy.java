@@ -49,6 +49,8 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
   PGraphics toyGraphics;
   private static final int CONTROLS_MIN_WIDTH = 200;
 
+  private static final String SHADER_DIR = "";
+
   public ShaderToy(LX lx) {
     super(lx, "");
     fpsKnob.setValue(60);
@@ -65,8 +67,17 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     context.print();
     context.printGL();
 
-    shaderFiles = PathUtils.findDataFiles("", ".frag");
+    shaderFiles = PathUtils.findDataFiles(SHADER_DIR, ".frag");
     for (String filename : shaderFiles) {
+      // Use a name that's suitable for the knob
+      int index = filename.lastIndexOf('/');
+      if (index >= 0) {
+        filename = filename.substring(index + 1);
+      }
+      index = filename.lastIndexOf('.');
+      if (index >= 0) {
+        filename = filename.substring(0, index);
+      }
       fileItems.add(new FileItem(filename));
     }
 
@@ -101,7 +112,7 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     if (context != null) context.release();
     context = new DwPixelFlow(RainbowStudio.pApplet);
     // TODO(tracy): Handle file not found issue.
-    toy = new DwShadertoy(context, "data/" + shaderFile + ".frag");
+    toy = new DwShadertoy(context, "data/" + SHADER_DIR + shaderFile + ".frag");
   }
 
   public void draw(double drawDeltaMs) {
