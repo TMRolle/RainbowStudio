@@ -66,7 +66,7 @@
         "patterns": [
           {
             "id": 239,
-            "class": "org.rainbowstudio.patterns.Pong",
+            "class": "com.giantrainbow.patterns.Pong",
             "modulationColor": -16756225,
             "parameters": {
               "label": "Pong"
@@ -80,7 +80,7 @@
           },
           {
             "id": 265,
-            "class": "org.rainbowstudio.patterns.Lines",
+            "class": "com.giantrainbow.patterns.Lines",
             "modulationColor": -45056,
             "parameters": {
               "label": "Lines",
@@ -125,7 +125,7 @@
         "patterns": [
           {
             "id": 248,
-            "class": "org.rainbowstudio.patterns.FlamingoRace",
+            "class": "com.giantrainbow.patterns.FlamingoRace",
             "modulationColor": -6619392,
             "parameters": {
               "label": "FlamingoRace",

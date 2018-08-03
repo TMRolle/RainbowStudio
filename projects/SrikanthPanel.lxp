@@ -129,7 +129,7 @@
         "patterns": [
           {
             "id": 271,
-            "class": "org.rainbowstudio.patterns.RainbowEqualizerPattern",
+            "class": "com.giantrainbow.patterns.RainbowEqualizerPattern",
             "modulationColor": -58368,
             "parameters": {
               "label": "RainbowEqualizer"
@@ -172,7 +172,7 @@
         "patterns": [
           {
             "id": 357,
-            "class": "org.rainbowstudio.patterns.Rainbow",
+            "class": "com.giantrainbow.patterns.Rainbow",
             "modulationColor": -65492,
             "parameters": {
               "label": "Rainbow"
@@ -215,7 +215,7 @@
         "patterns": [
           {
             "id": 359,
-            "class": "org.rainbowstudio.patterns.RainbowScannerPattern",
+            "class": "com.giantrainbow.patterns.RainbowScannerPattern",
             "modulationColor": -14680320,
             "parameters": {
               "label": "RainbowScanner",
@@ -259,7 +259,7 @@
         "patterns": [
           {
             "id": 361,
-            "class": "org.rainbowstudio.patterns.Rainbow",
+            "class": "com.giantrainbow.patterns.Rainbow",
             "modulationColor": -16711797,
             "parameters": {
               "label": "Rainbow"
@@ -301,7 +301,7 @@
         "patterns": [
           {
             "id": 363,
-            "class": "org.rainbowstudio.patterns.Tutorial",
+            "class": "com.giantrainbow.patterns.Tutorial",
             "modulationColor": -16773121,
             "parameters": {
               "label": "Tutorial",
@@ -345,7 +345,7 @@
         "patterns": [
           {
             "id": 371,
-            "class": "org.rainbowstudio.patterns.Rainbow",
+            "class": "com.giantrainbow.patterns.Rainbow",
             "modulationColor": -16580353,
             "parameters": {
               "label": "Rainbow"

@@ -67,7 +67,7 @@
         "patterns": [
           {
             "id": 456,
-            "class": "org.rainbowstudio.patterns.BasicMidiPP",
+            "class": "com.giantrainbow.patterns.BasicMidiPP",
             "modulationColor": -65353,
             "parameters": {
               "label": "BasicMidiPP",
@@ -111,7 +111,7 @@
         "patterns": [
           {
             "id": 500,
-            "class": "org.rainbowstudio.patterns.RainbowGIF",
+            "class": "com.giantrainbow.patterns.RainbowGIF",
             "modulationColor": -65519,
             "parameters": {
               "label": "RainbowGIF",
@@ -156,7 +156,7 @@
         "patterns": [
           {
             "id": 492,
-            "class": "org.rainbowstudio.patterns.RainbowScannerPattern",
+            "class": "com.giantrainbow.patterns.RainbowScannerPattern",
             "modulationColor": -16770817,
             "parameters": {
               "label": "RainbowScanner",
@@ -172,7 +172,7 @@
           },
           {
             "id": 494,
-            "class": "org.rainbowstudio.patterns.Flags",
+            "class": "com.giantrainbow.patterns.Flags",
             "modulationColor": -12779265,
             "parameters": {
               "label": "Flags",

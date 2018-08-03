@@ -81,7 +81,7 @@
           },
           {
             "id": 37,
-            "class": "org.rainbowstudio.patterns.Rainbow",
+            "class": "com.giantrainbow.patterns.Rainbow",
             "modulationColor": -58624,
             "parameters": {
               "label": "Rainbow"
@@ -138,7 +138,7 @@
           },
           {
             "id": 31,
-            "class": "org.rainbowstudio.patterns.ShaderToy",
+            "class": "com.giantrainbow.patterns.ShaderToy",
             "modulationColor": -9728,
             "parameters": {
               "label": "ShaderToy",

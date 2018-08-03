@@ -67,7 +67,7 @@
         "patterns": [
           {
             "id": 456,
-            "class": "org.rainbowstudio.patterns.BasicMidiPP",
+            "class": "com.giantrainbow.patterns.BasicMidiPP",
             "modulationColor": -65353,
             "parameters": {
               "label": "BasicMidiPP"
@@ -124,7 +124,7 @@
           },
           {
             "id": 468,
-            "class": "org.rainbowstudio.patterns.Flags",
+            "class": "com.giantrainbow.patterns.Flags",
             "modulationColor": -4915456,
             "parameters": {
               "label": "Flags"

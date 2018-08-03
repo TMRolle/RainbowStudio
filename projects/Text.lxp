@@ -82,7 +82,7 @@
           },
           {
             "id": 482,
-            "class": "org.rainbowstudio.patterns.AnimatedTextPP",
+            "class": "com.giantrainbow.patterns.AnimatedTextPP",
             "modulationColor": -14614273,
             "parameters": {
               "label": "AnimatedTextPP",
@@ -127,7 +127,7 @@
         "patterns": [
           {
             "id": 496,
-            "class": "org.rainbowstudio.patterns.Rainbow",
+            "class": "com.giantrainbow.patterns.Rainbow",
             "modulationColor": -41984,
             "parameters": {
               "label": "Rainbow"

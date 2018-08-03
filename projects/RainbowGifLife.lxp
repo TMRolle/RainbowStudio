@@ -67,7 +67,7 @@
         "patterns": [
           {
             "id": 429,
-            "class": "org.rainbowstudio.patterns.RainbowGIF",
+            "class": "com.giantrainbow.patterns.RainbowGIF",
             "modulationColor": -39424,
             "parameters": {
               "label": "RainbowGIF",

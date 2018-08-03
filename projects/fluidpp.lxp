@@ -66,7 +66,7 @@
         "patterns": [
           {
             "id": 101,
-            "class": "org.rainbowstudio.patterns.FluidPP",
+            "class": "com.giantrainbow.patterns.FluidPP",
             "modulationColor": -16711686,
             "parameters": {
               "label": "FluidPP",
@@ -81,7 +81,7 @@
           },
           {
             "id": 108,
-            "class": "org.rainbowstudio.patterns.ShaderToy",
+            "class": "com.giantrainbow.patterns.ShaderToy",
             "modulationColor": -10419969,
             "parameters": {
               "label": "ShaderToy",
@@ -96,7 +96,7 @@
           },
           {
             "id": 117,
-            "class": "org.rainbowstudio.patterns.ShaderToyAudio",
+            "class": "com.giantrainbow.patterns.ShaderToyAudio",
             "modulationColor": -16737281,
             "parameters": {
               "label": "ShaderToyAudio",
@@ -154,7 +154,7 @@
           },
           {
             "id": 132,
-            "class": "org.rainbowstudio.patterns.RainbowEqualizerPattern",
+            "class": "com.giantrainbow.patterns.RainbowEqualizerPattern",
             "modulationColor": -16711779,
             "parameters": {
               "label": "RainbowEqualizer"

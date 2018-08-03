@@ -67,7 +67,7 @@
         "patterns": [
           {
             "id": 438,
-            "class": "org.rainbowstudio.patterns.AnimatedSprite",
+            "class": "com.giantrainbow.patterns.AnimatedSprite",
             "modulationColor": -39936,
             "parameters": {
               "label": "AnimatedSprite",
