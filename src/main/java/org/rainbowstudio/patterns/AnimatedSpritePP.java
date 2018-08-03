@@ -74,7 +74,7 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
    * Calls {@link PathUtils#loadSprite(String)} but also keeps track of the current position.
    * This prepends {@link #SPRITE_DIR} and appends ".gif".
    *
-   * @param path the sprite's complete path under the data directory
+   * @param path the sprite's name, not including parent paths or the ".gif" suffix
    */
   private void loadSprite(String path) {
     images = PathUtils.loadSprite(SPRITE_DIR + path + ".gif");

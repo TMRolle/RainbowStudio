@@ -72,7 +72,7 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
    *
    * @param gifname the sprite's name, not including parent paths or the ".gif" suffix
    */
-  protected void loadGif(String gifname) {
+  private void loadGif(String gifname) {
     PImage[] newImages = PathUtils.loadSprite(filesDir + gifname + ".gif");
     for (PImage image : newImages) {
       image.resize(imageWidth, imageHeight);
