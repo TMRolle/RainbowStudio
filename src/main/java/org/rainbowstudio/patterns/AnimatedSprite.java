@@ -6,10 +6,8 @@ import static processing.core.PApplet.sin;
 import static processing.core.PConstants.P2D;
 import static processing.core.PConstants.PI;
 
-import gifAnimation.Gif;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
-import org.rainbowstudio.RainbowStudio;
 import org.rainbowstudio.model.RainbowBaseModel;
 import processing.core.PImage;
 
@@ -23,7 +21,7 @@ public class AnimatedSprite extends PGTexture {
   int spriteWidth = 0;
   public AnimatedSprite(LX lx) {
     super(lx, P2D);
-    String filename = RainbowStudio.pApplet.dataPath("./spritepp/" + spritename + ".gif");
+//    String filename = RainbowStudio.pApplet.dataPath("./spritepp/" + spritename + ".gif");
     for (int i = 0; i < images.length; i++) {
       images[i].loadPixels();
       // assume frames are the same size.

@@ -8,7 +8,7 @@ import org.rainbowstudio.model.RainbowBaseModel;
 public class RainbowImagePP extends RainbowImageBase {
   public RainbowImagePP(LX lx) {
     super(lx, ((RainbowBaseModel)lx.model).pointsWide, ((RainbowBaseModel)lx.model).pointsHigh,
-      "./imgpp/",
+      "imgpp/",
       "oregon.jpg",
       false);
   }

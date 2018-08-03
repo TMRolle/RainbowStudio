@@ -12,7 +12,7 @@ import org.rainbowstudio.model.RainbowBaseModel;
 public class RainbowGIFPP extends RainbowGIFBase {
   public RainbowGIFPP(LX lx) {
     super(lx, ((RainbowBaseModel)lx.model).pointsWide, ((RainbowBaseModel)lx.model).pointsHigh,
-    "./gifpp/",
+    "gifpp/",
     "life2",
     false);
   }

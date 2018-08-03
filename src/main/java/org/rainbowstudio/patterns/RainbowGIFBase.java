@@ -1,6 +1,5 @@
 package org.rainbowstudio.patterns;
 
-import gifAnimation.Gif;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.BooleanParameter;
@@ -14,10 +13,9 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 import heronarts.p3lx.ui.component.UITextBox;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.rainbowstudio.RainbowStudio;
+import org.rainbowstudio.PathUtils;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -44,7 +42,7 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
   protected double currentFrame = 0.0;
   protected int imageWidth = 0;
   protected int imageHeight = 0;
-  protected String filesDir;
+  protected String filesDir;  // Must end in a '/'
   boolean includeAntialias;
 
   public RainbowGIFBase(LX lx, int imageWidth, int imageHeight, String dir,
@@ -55,6 +53,9 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
     this.includeAntialias = includeAntialias;
     gifKnob.setValue(defaultFile);
 
+    if (!dir.endsWith("/")) {
+      dir = dir + "/";
+    }
     filesDir = dir;
     loadGif(gifKnob.getString());
     reloadFileList();
@@ -65,12 +66,16 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
     fpsKnob.setValue(10);
   }
 
+  /**
+   * Calls {@link PathUtils#loadSprite(String)} but also keeps track of the current position.
+   * This prepends {@link #filesDir} and appends ".gif".
+   *
+   * @param gifname the sprite's name, not including parent paths or the ".gif" suffix
+   */
   protected void loadGif(String gifname) {
-    String filename = RainbowStudio.pApplet.dataPath(filesDir + gifname + ".gif");
-    PImage[] newImages = Gif.getPImages(RainbowStudio.pApplet, filename);
-    for (int i = 0; i < newImages.length; i++) {
-      newImages[i].resize(imageWidth, imageHeight);
-      newImages[i].loadPixels();
+    PImage[] newImages = PathUtils.loadSprite(filesDir + gifname + ".gif");
+    for (PImage image : newImages) {
+      image.resize(imageWidth, imageHeight);
     }
     // minimize race condition when reloading.
     images = newImages;
@@ -93,31 +98,12 @@ abstract class RainbowGIFBase extends LXPattern implements CustomDeviceUI {
   abstract protected void renderToPoints();
 
   protected void reloadFileList() {
-    gifFiles = getGifFiles();
+    gifFiles = PathUtils.findDataFiles(filesDir, ".gif");
     fileItems.clear();
     for (String filename : gifFiles) {
       fileItems.add(new FileItem(filename));
     }
     if (fileItemList != null) fileItemList.setItems(fileItems);
-  }
-
-  protected File getFile() {
-    return new File(RainbowStudio.pApplet.dataPath(filesDir + this.gifKnob.getString() + ".gif"));
-  }
-
-  protected List<String> getGifFiles() {
-    List<String> results = new ArrayList<String>();
-
-    File[] files = new File(RainbowStudio.pApplet.dataPath(filesDir)).listFiles();
-    //If this pathname does not denote a directory, then listFiles() returns null.
-    for (File file : files) {
-      if (file.isFile()) {
-        if (file.getName().endsWith(".gif")) {
-          results.add(ImgUtil.stripExtension(file.getName()));
-        }
-      }
-    }
-    return results;
   }
 
   //

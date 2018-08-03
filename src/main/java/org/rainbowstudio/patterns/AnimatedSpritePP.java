@@ -1,6 +1,5 @@
 package org.rainbowstudio.patterns;
 
-import gifAnimation.Gif;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.parameter.CompoundParameter;
@@ -12,10 +11,9 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UITextBox;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.rainbowstudio.RainbowStudio;
+import org.rainbowstudio.PathUtils;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -32,6 +30,8 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
   private static final int CONTROLS_MIN_WIDTH = 120;
   public String filename = "smallcat.gif";
 
+  private static final String SPRITE_DIR = "spritepp/";
+
   private PImage[] images;
   protected int currentPos = 0;
 
@@ -40,8 +40,17 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
     addParameter(xSpeed);
     xSpeed.setValue(5);
     loadSprite(spriteFileKnob.getString());
-    spriteFiles = getSpriteFiles();
+    spriteFiles =  PathUtils.findDataFiles(SPRITE_DIR, ".gif");
     for (String filename : spriteFiles) {
+      // Use a name that's suitable for the knob
+      int index = filename.lastIndexOf('/');
+      if (index >= 0) {
+        filename = filename.substring(index + 1);
+      }
+      index = filename.lastIndexOf('.');
+      if (index >= 0) {
+        filename = filename.substring(0, index);
+      }
       fileItems.add(new FileItem(filename));
     }
   }
@@ -61,34 +70,19 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
     }
   }
 
-  protected void loadSprite(String spritename) {
-    String filename = RainbowStudio.pApplet.dataPath("./spritepp/" + spritename + ".gif");
-    PImage[] newImages = Gif.getPImages(RainbowStudio.pApplet, filename);
-    for (int i = 0; i < newImages.length; i++) {
-      newImages[i].loadPixels();
+  /**
+   * Calls {@link PathUtils#loadSprite(String)} but also keeps track of the current position.
+   * This prepends {@link #SPRITE_DIR} and appends ".gif".
+   *
+   * @param path the sprite's complete path under the data directory
+   */
+  private void loadSprite(String path) {
+    images = PathUtils.loadSprite(SPRITE_DIR + path + ".gif");
+
+    if (images.length > 0) {
+      // Start off the screen to the right.
+      currentPos = imageWidth + images[0].width + 1;
     }
-    images = newImages;
-    // Start off the screen to the right.
-    currentPos = imageWidth + images[0].width + 1;
-  }
-
-  protected File getFile() {
-    return new File(RainbowStudio.pApplet.dataPath("./spritepp/" + this.spriteFileKnob.getString() + ".gif"));
-  }
-
-  protected List<String> getSpriteFiles() {
-    List<String> results = new ArrayList<String>();
-
-    File[] files = new File(RainbowStudio.pApplet.dataPath("./spritepp/")).listFiles();
-    //If this pathname does not denote a directory, then listFiles() returns null.
-    for (File file : files) {
-      if (file.isFile()) {
-        if (file.getName().endsWith(".gif")) {
-          results.add(ImgUtil.stripExtension(file.getName()));
-        }
-      }
-    }
-    return results;
   }
 
   //
@@ -141,7 +135,7 @@ public class AnimatedSpritePP extends PGPixelPerfect implements CustomDeviceUI {
     }
     public void onActivate() {
       spriteFileKnob.setValue(filename);
-      loadSprite(filename);
+      loadSprite(SPRITE_DIR + filename + ".gif");
     }
   }
 }

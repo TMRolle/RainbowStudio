@@ -34,8 +34,8 @@ import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.logging.Level;
@@ -206,12 +206,16 @@ public class RainbowStudio extends PApplet {
     }
 
     // Check for data/PLAYASIDE
-    if (new File(dataPath("PLAYASIDE")).exists()) {
-      System.out.println("PLAYASIDE");
-      modeSelector.autoAudioModeP.setValue(true);
-    } else {
-      System.out.println(dataPath("PLAYASIDE") + " does not exist.");
-      modeSelector.autoAudioModeP.setValue(false);
+    try (InputStream in = createInput("PLAYASIDE")) {
+      if (in != null) {
+        logger.info("\"PLAYASIDE\" exists.");
+        modeSelector.autoAudioModeP.setValue(true);
+      } else {
+        logger.info("\"PLAYASIDE\" does not exist.");
+        modeSelector.autoAudioModeP.setValue(false);
+      }
+    } catch (IOException ex) {
+      // Do nothing; it's the result of auto-closing the InputStream
     }
 
     // Dump our MIDI device names for reference.

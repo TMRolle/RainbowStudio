@@ -18,10 +18,11 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UITextBox;
-import java.io.File;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.rainbowstudio.PathUtils;
 import org.rainbowstudio.RainbowStudio;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -64,7 +65,7 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     context.print();
     context.printGL();
 
-    shaderFiles = getShaderFiles();
+    shaderFiles = PathUtils.findDataFiles("", ".frag");
     for (String filename : shaderFiles) {
       fileItems.add(new FileItem(filename));
     }
@@ -114,23 +115,8 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     pg.loadPixels();
   }
 
-  protected File getFile() {
-    return new File(RainbowStudio.pApplet.dataPath(this.shaderFileKnob.getString() + ".frag"));
-  }
-
-  protected List<String> getShaderFiles() {
-    List<String> results = new ArrayList<String>();
-
-    File[] files = new File(RainbowStudio.pApplet.dataPath("./")).listFiles();
-    //If this pathname does not denote a directory, then listFiles() returns null.
-    for (File file : files) {
-      if (file.isFile()) {
-        if (file.getName().endsWith(".frag")) {
-          results.add(ImgUtil.stripExtension(file.getName()));
-        }
-      }
-    }
-    return results;
+  protected InputStream getFile() {
+    return RainbowStudio.pApplet.createInput(this.shaderFileKnob.getString() + ".frag");
   }
 
   //
@@ -179,17 +165,16 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
       @Override
         public void onToggle(boolean on) {
         if (on) {
-          try {
-            File shaderFile = getFile();
-            if (!shaderFile.exists()) {
-              // For new files, copy the template in.
-              java.nio.file.Files.copy(new File(RainbowStudio.pApplet.dataPath("basic.frag")).toPath(),
-                shaderFile.toPath(),
-                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            }
-            java.awt.Desktop.getDesktop().edit(shaderFile);
-          }
-          catch (Throwable t) {
+          try (InputStream in = getFile()) {
+            // TODO: Implement this
+//            if (in == null) {
+//              // For new files, copy the template in.
+//              java.nio.file.Files.copy(new File(RainbowStudio.pApplet.dataPath("basic.frag")).toPath(),
+//                shaderFile.toPath(),
+//                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+//            }
+//            java.awt.Desktop.getDesktop().edit(shaderFile);
+          } catch (Throwable t) {
             System.err.println(t.getLocalizedMessage());
           }
         }

@@ -11,7 +11,7 @@ public class RainbowImage extends RainbowImageBase {
   public RainbowImage(LX lx) {
     super(lx, ceil(RainbowBaseModel.outerRadius * RainbowBaseModel.pixelsPerFoot * 2.0f),
           ceil(RainbowBaseModel.outerRadius * RainbowBaseModel.pixelsPerFoot),
-      "./img/",
+      "img/",
       "oregontex.jpg",
       true);
   }

@@ -13,9 +13,10 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 import heronarts.p3lx.ui.component.UITextBox;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.rainbowstudio.PathUtils;
 import org.rainbowstudio.RainbowStudio;
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -34,10 +35,13 @@ abstract class RainbowImageBase extends LXPattern implements CustomDeviceUI {
   protected List<String> imgFiles;
   private static final int CONTROLS_MIN_WIDTH = 160;
 
+  private static final List<String> IMG_EXTS =
+      Arrays.asList(new String[] { ".gif", ".png", ".jpg" });
+
   protected PImage image;
   protected int imageWidth = 0;
   protected int imageHeight = 0;
-  protected String filesDir;
+  protected String filesDir;  // Must end in a '/'
   protected boolean includeAntialias;
 
   public RainbowImageBase(LX lx, int imageWidth, int imageHeight, String filesDir, String defaultFile,
@@ -45,6 +49,9 @@ abstract class RainbowImageBase extends LXPattern implements CustomDeviceUI {
     super(lx);
     this.imageWidth = imageWidth;
     this.imageHeight = imageHeight;
+    if (!filesDir.endsWith("/")) {
+      filesDir = filesDir + "/";
+    }
     this.filesDir = filesDir;
     this.includeAntialias = includeAntialias;
     reloadFileList();
@@ -59,8 +66,7 @@ abstract class RainbowImageBase extends LXPattern implements CustomDeviceUI {
   }
 
   protected void loadImg(String imgname) {
-    String filename = RainbowStudio.pApplet.dataPath(filesDir + imgname);
-    image = RainbowStudio.pApplet.loadImage(filename);
+    image = RainbowStudio.pApplet.loadImage(filesDir + imgname);
     image.resize(imageWidth, imageHeight);
     image.loadPixels();
   }
@@ -82,35 +88,19 @@ abstract class RainbowImageBase extends LXPattern implements CustomDeviceUI {
 
   protected abstract void renderToPoints();
 
-  protected File getFile() {
-    return new File(RainbowStudio.pApplet.dataPath(filesDir + this.imgKnob.getString()));
-  }
-
   protected void reloadFileList() {
-    imgFiles = getImgFiles();
+    imgFiles = PathUtils.findDataFiles(filesDir, IMG_EXTS);
     fileItems.clear();
     for (String filename : imgFiles) {
+      // Use a name that's suitable for the knob
+      int index = filename.lastIndexOf('/');
+      if (index >= 0) {
+        filename = filename.substring(index + 1);
+      }
       fileItems.add(new FileItem(filename));
     }
     if (fileItemList != null)
       fileItemList.setItems(fileItems);
-  }
-
-  protected List<String> getImgFiles() {
-    List<String> results = new ArrayList<String>();
-    String[] imgExtensions = { ".gif", ".png", ".jpg"};
-    File[] files = new File(RainbowStudio.pApplet.dataPath(filesDir)).listFiles();
-    //If this pathname does not denote a directory, then listFiles() returns null.
-    for (File file : files) {
-      if (file.isFile()) {
-        for (int i = 0; i < imgExtensions.length; i++) {
-          if (file.getName().endsWith(imgExtensions[i])) {
-            results.add(file.getName());
-          }
-        }
-      }
-    }
-    return results;
   }
 
   //

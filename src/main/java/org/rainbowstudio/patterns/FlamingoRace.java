@@ -2,13 +2,12 @@ package org.rainbowstudio.patterns;
 
 import static processing.core.PApplet.ceil;
 
-import gifAnimation.Gif;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import org.rainbowstudio.RainbowStudio;
+import org.rainbowstudio.PathUtils;
 import processing.core.PImage;
 
 @LXCategory(LXCategory.FORM)
@@ -61,18 +60,20 @@ public class FlamingoRace extends PGPixelPerfect {
   protected int framesUntilStart = framesUntilStartInit;
   protected boolean debugLines = false;
 
+  private static final String SPRITE_DIR = "spritepp/";
+
   public FlamingoRace(LX lx) {
     super(lx, "");
     addParameter(xSpeed);
     xSpeed.setValue(5);
-    flamingoWalk = loadSprite("Ringo2");
-    flamingoJump = loadSprite("Jingo");
-    flame = loadSprite("Flame");
-    fireworks = loadSprite("fireworks");
-    effigy = loadSprite("Effigy");
-    desertNight = loadSprite("desertnightblurred");
-    desertSky = loadSprite("cloudblurred");
-    effigyBrown = loadSprite("EffigyBrown");
+    flamingoWalk = PathUtils.loadSprite(SPRITE_DIR + "Ringo2.gif");
+    flamingoJump = PathUtils.loadSprite(SPRITE_DIR + "Jingo.gif");
+    flame = PathUtils.loadSprite(SPRITE_DIR + "Flame.gif");
+    fireworks = PathUtils.loadSprite(SPRITE_DIR + "fireworks.gif");
+    effigy = PathUtils.loadSprite(SPRITE_DIR + "Effigy.gif");
+    desertNight = PathUtils.loadSprite(SPRITE_DIR + "desertnightblurred.gif");
+    desertSky = PathUtils.loadSprite(SPRITE_DIR + "cloudblurred.gif");
+    effigyBrown = PathUtils.loadSprite(SPRITE_DIR + "EffigyBrown.gif");
     currentPos2 = imageWidth;
     waitingForRight1 = true;
     waitingForRight2 = true;
@@ -274,15 +275,6 @@ public class FlamingoRace extends PGPixelPerfect {
       }
     }
     return false;
-  }
-
-  protected PImage[] loadSprite(String spritename) {
-    String filename = RainbowStudio.pApplet.dataPath("./spritepp/" + spritename + ".gif");
-    PImage[] newImages = Gif.getPImages(RainbowStudio.pApplet, filename);
-    for (int i = 0; i < newImages.length; i++) {
-      newImages[i].loadPixels();
-    }
-    return newImages;
   }
 
   @Override
