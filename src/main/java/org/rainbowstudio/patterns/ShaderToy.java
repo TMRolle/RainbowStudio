@@ -18,17 +18,29 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UITextBox;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.rainbowstudio.PathUtils;
 import org.rainbowstudio.RainbowStudio;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
+/**
+ * This copies shaders from the data/ area into a local shaders/ directory if they don't
+ * exist, and then uses those for utilization and editing.
+ */
 @LXCategory(LXCategory.FORM)
 public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
+  private static final Logger logger = Logger.getLogger(ShaderToy.class.getName());
+
   public final StringParameter shaderFileKnob = new StringParameter("frag", "sparkles");
   public final CompoundParameter knob1 =
     new CompoundParameter("K1", 0, 1).setDescription("Mapped to iMouse.x");
@@ -49,7 +61,8 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
   PGraphics toyGraphics;
   private static final int CONTROLS_MIN_WIDTH = 200;
 
-  private static final String SHADER_DIR = "";
+  private static final String SHADER_DATA_DIR = "";
+  private static final String LOCAL_SHADER_DIR = "shaders/";
 
   public ShaderToy(LX lx) {
     super(lx, "");
@@ -67,8 +80,45 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     context.print();
     context.printGL();
 
-    shaderFiles = PathUtils.findDataFiles(SHADER_DIR, ".frag");
+    // For each shader, ensure there's a local copy in "shaders/"
+    File shaderDir = new File(LOCAL_SHADER_DIR);
+    if (shaderDir.exists()) {
+      if (!shaderDir.isDirectory()) {
+        logger.warning("Could not create \"" + LOCAL_SHADER_DIR + "\" directory");
+        shaderDir = null;
+      }
+    } else {
+      // Try to create the directory
+      if (shaderDir.mkdir()) {
+        logger.info("Created \"" + LOCAL_SHADER_DIR + "\" directory");
+      } else {
+        logger.warning("Could not create \"" + LOCAL_SHADER_DIR + "\" directory");
+        shaderDir = null;
+      }
+    }
+    shaderFiles = PathUtils.findDataFiles(SHADER_DATA_DIR, ".frag");
+    Collections.sort(shaderFiles);
     for (String filename : shaderFiles) {
+      // Copy all the shaders locally
+      if (shaderDir != null) {
+        try (InputStream in = RainbowStudio.pApplet.createInput(filename)) {
+          File shaderFile = new File(shaderDir, new File(filename).getName());
+          if (shaderFile.exists()) {
+            logger.info("Not overwriting shader: from=data:" + filename + " to=" + shaderFile);
+          } else {
+            try {
+              Files.copy(in, shaderFile.toPath());
+              logger.info("Copied shader: from=data:" + filename + " to=" + shaderFile);
+            } catch (IOException ex) {
+              logger.log(Level.SEVERE,
+                  "Error copying shader: from=data:" + filename + " to=" + shaderFile);
+            }
+          }
+        } catch (IOException ex) {
+          logger.log(Level.SEVERE, "Error accessing shader resource: " + filename, ex);
+        }
+      }
+
       // Use a name that's suitable for the knob
       int index = filename.lastIndexOf('/');
       if (index >= 0) {
@@ -108,15 +158,26 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
   }
 
   protected void loadShader(String shaderFile) {
-    if (toy != null) toy.release();  // release existing shader texture
+    if (toy != null) {
+      // release existing shader texture
+      toy.release();
+      toy = null;
+    }
     if (context != null) context.release();
     context = new DwPixelFlow(RainbowStudio.pApplet);
     // TODO(tracy): Handle file not found issue.
-    toy = new DwShadertoy(context, "data/" + SHADER_DIR + shaderFile + ".frag");
+
+    File local = new File(LOCAL_SHADER_DIR + shaderFile + ".frag");
+    if (local.isFile()) {
+      toy = new DwShadertoy(context, local.getPath());
+    }
   }
 
   public void draw(double drawDeltaMs) {
     pg.background(0);
+    if (toy == null) {
+      return;
+    }
     toy.set_iChannel(0, tex0);
     toy.set_iMouse(knob1.getValuef(), knob2.getValuef(), knob3.getValuef(), knob4.getValuef());
     toy.apply(toyGraphics);
@@ -174,19 +235,16 @@ public class ShaderToy extends PGPixelPerfect implements CustomDeviceUI {
     // Button for editing a file.
     new UIButton(0, 24, device.getContentWidth(), 16) {
       @Override
-        public void onToggle(boolean on) {
-        if (on) {
-          try (InputStream in = getFile()) {
-            // TODO: Implement this
-//            if (in == null) {
-//              // For new files, copy the template in.
-//              java.nio.file.Files.copy(new File(RainbowStudio.pApplet.dataPath("basic.frag")).toPath(),
-//                shaderFile.toPath(),
-//                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-//            }
-//            java.awt.Desktop.getDesktop().edit(shaderFile);
-          } catch (Throwable t) {
-            System.err.println(t.getLocalizedMessage());
+      public void onToggle(boolean on) {
+        if (!on) {
+          return;
+        }
+        File local = new File(LOCAL_SHADER_DIR + shaderFileKnob.getString() + ".frag");
+        if (local.isFile()) {
+          try {
+            java.awt.Desktop.getDesktop().edit(local);
+          } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Error editing file: " + local, ex);
           }
         }
       }
