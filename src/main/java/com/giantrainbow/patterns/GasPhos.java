@@ -119,7 +119,7 @@ public class GasPhos extends PGPixelPerfect {
       sigmaJBoost += 2;
     }
 
-    Arrays.fill(sat, satMin + satBoost);
+    float mySat = satMin + satBoost;
 
     float targetHue = 0.5f + sin(PI * frameCount/200)/0.5f;
     for (int i = 0; i < screenSize; i++) {
@@ -150,7 +150,7 @@ public class GasPhos extends PGPixelPerfect {
 
     pg.loadPixels();
     for (int i = 0; i < screenSize; i++) {
-      pg.pixels[i] = pg.color(hue[i], sat[i], bri[i]);
+      pg.pixels[i] = pg.color(hue[i], mySat, bri[i]);
     }
     pg.updatePixels();
   }
@@ -382,8 +382,10 @@ public class GasPhos extends PGPixelPerfect {
 
             int screenIndex = i*pg.width + j;
             workingHue[screenIndex] = hue[coordsIndex];
+
+            // If at the center of the mask
             if (particleMaskX[maskIndex] == 0 && particleMaskY[maskIndex] == 0) {
-              if (workingSat[screenIndex] > 0.0f) {
+              if (workingSat[screenIndex] != 0.0f) {
                 workingCell[screenIndex] = 1.0f;
               }
             }
